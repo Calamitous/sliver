@@ -1,6 +1,6 @@
 # require 'rubygems'
 require 'spec/autorun'
-require 'sliver'
+require 'lib/sliver'
 
 describe "Sliver" do
   context "while entagging data" do
