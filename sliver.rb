@@ -21,7 +21,7 @@ class Array
     list = reject{ |x| x.is_a?(Hash) }
     head, tail = list.bite_off_head
 
-    fore_tag = [head.to_s, properties.to_html].compact.reject{ |x| x.empty? }.join(' ')
+    fore_tag = [head.to_s, properties.to_property_string].compact.reject{ |x| x.empty? }.join(' ')
 
     return "<#{fore_tag} />" if tail.nil? || tail.empty?
     "<#{fore_tag}>#{tail.to_html}</#{head}>"
@@ -37,7 +37,7 @@ class Array
 end
 
 class Hash
-  def to_html
+  def to_property_string
     self.map{ |k, v| "#{k.to_s}=\"#{v.to_s}\""}.join(' ')
   end
 end
