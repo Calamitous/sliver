@@ -1,0 +1,6 @@
+Make the actual, you know, templating part.
+On first pass, should templates be rendered down to interpolated strings?
+  eval? or fast sub-template? or arrayification + join?
+jam all tags together?  yeah, forget whitespace
+Safety all evaled strings
+escape all html'ed text?
