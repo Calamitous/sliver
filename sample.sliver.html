@@ -1,0 +1,22 @@
+use "test.html"
+change ".test" to "Go to Home"
+change_href for ".link" to home_url
+add @things to "#list" using "list_template.html"
+remove "#admin_login" unless @is_admin
+
+OR
+
+template 'test.html'
+'.test'.becomes "Go to Home"
+'.link'.sets('href', home_url)
+'#list'.adds(@things, "list_template.html")
+'#admin_login'.remove unless @is_admin
+
+OR
+
+use_template 'test.html'
+change('.test',_ 'Go to Home')
+set('.link', {:href => hone_url}
+add('#list', @things, 'list_template.html')
+remove('#admin_login') unless @is_admin
+
