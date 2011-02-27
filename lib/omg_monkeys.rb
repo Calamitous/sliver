@@ -16,7 +16,9 @@ class Array
 
   def to_tag
     return '' if empty?
-    return @htmled = "<#{self[0].to_s} />" if self.size == 1
+    if self.size == 1
+      return self[0].is_a?(Symbol) ? "<#{self[0].to_s} />" : self[0]
+    end
 
     list = reject{ |x| x.is_a?(Hash) }
     head, tail = list.bite_off_head

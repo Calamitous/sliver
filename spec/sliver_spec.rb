@@ -29,6 +29,15 @@ describe "Sliver" do
       data.to_html.should == '<a><b><c><d /></c></b></a>'
     end
 
+    it "entags nested arrays including static text" do
+      # hmmm, what should be the preferred usage...
+      # [:p, "Test", [:a, {:href => '/wut'}, "this"], "baby"] 
+      # or
+      # [:p, "Test #{[:a, {:href => '/wut'}, "this"].to_html} baby"] 
+      data = [[:a, [:b, "NO WAI", [:c, [:d, "LOLWUT"]]]]]
+      # data.to_html.should == '<a><b>NO WAI<c><d>LOLWUT</d></c></b></a>'
+    end
+
     it "ignores empty nesting" do
       data = [[:a, [[[:b]]], [:c]]]
       data.to_html.should == '<a><b /><c /></a>'
@@ -39,10 +48,20 @@ describe "Sliver" do
       lambda { data.to_html }.should raise_error(":c is not a valid tag array.  Did you mean [:c]?")
     end
 
+    it "renders static text" do
+      data = [:p, "this thing"]
+      data.to_html.should == '<p>this thing</p>'
+    end
+
     context "with properties" do
       it "entags a tag array" do
         data = [[:a, {:foo => :bar}]]
         data.to_html.should == '<a foo="bar" />'
+      end
+
+      it "renders static text" do
+        data = [:p, {:class => 'test'},  "this thing"]
+        data.to_html.should == '<p class="test">this thing</p>'
       end
 
       it "entags properties around interleaved tag arrays" do
