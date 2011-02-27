@@ -44,4 +44,3 @@ class Hash
   end
 end
 
-

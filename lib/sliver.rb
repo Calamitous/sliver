@@ -1,6 +1,6 @@
 require 'rubygems'
-require 'lib/omg_monkeys'
 require 'nokogiri'
+require_relative '../lib/omg_monkeys'
 
 class Sliver
   attr_reader :doc
