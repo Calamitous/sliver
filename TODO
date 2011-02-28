@@ -4,3 +4,5 @@ On first pass, should templates be rendered down to interpolated strings?
 jam all tags together?  yeah, forget whitespace
 Safety all evaled strings
 escape all html'ed text?
+de-monkeypatch Array and Hash, subclass and add a to_ method to A/H?
+
