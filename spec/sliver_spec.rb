@@ -1,94 +1,44 @@
 require 'rubygems'
 require 'rspec/autorun'
-require_relative '../lib/sliver.rb'
+#require_relative '../lib/sliver.rb'
+require 'lib/sliver.rb'
 
 describe "Sliver" do
-  context "while entagging data" do
-    it "entags a tag array" do
-      data = [[:a]]
-      data.to_html.should == '<a />'
+  context "rendering" do
+    before do
+      @template = <<TEMPLATE
+        <html>
+          <head>
+          </head>
+          <body>
+            <h1>Title!</h1>
+            <a class="link" href="/wtf">Click Me!</a>
+            <pre class="LOLCAT">CODE ME SOME CODE</pre>
+            <div id="list">
+              <p>Some test</p>
+              <p>MORE txt</p>
+            </div>
+          </body>
+        </html>
+TEMPLATE
     end
-
-    it "entags multiple arrays" do
-      data = [[[:a], [:b]]]
-      data.to_html.should == '<a /><b />'
-    end
-
-    it "entags nested tag arrays" do
-      data = [[:a, [:b]]]
-      data.to_html.should == '<a><b /></a>'
-    end
-
-    it "entags nested multiple tag arrays" do
-      data = [[[:a, [:b]], [:c, [:d]]]]
-      data.to_html.should == '<a><b /></a><c><d /></c>'
-    end
-
-    it "entags nested arrays to an arbitrary depth" do
-      data = [[:a, [:b, [:c, [:d]]]]]
-      data.to_html.should == '<a><b><c><d /></c></b></a>'
-    end
-
-    it "entags nested arrays including static text" do
-      # hmmm, what should be the preferred usage...
-      # [:p, "Test", [:a, {:href => '/wut'}, "this"], "baby"] 
-      # or
-      # [:p, "Test #{[:a, {:href => '/wut'}, "this"].to_html} baby"] 
-      data = [[:a, [:b, "NO WAI", [:c, [:d, "LOLWUT"]]]]]
-      # data.to_html.should == '<a><b>NO WAI<c><d>LOLWUT</d></c></b></a>'
-    end
-
-    it "ignores empty nesting" do
-      data = [[:a, [[[:b]]], [:c]]]
-      data.to_html.should == '<a><b /><c /></a>'
-    end
-
-    it "raises an error if a tag is not correctly wrapped" do
-      data = [[:a], :c]
-      lambda { data.to_html }.should raise_error(":c is not a valid tag array.  Did you mean [:c]?")
-    end
-
-    it "renders static text" do
-      data = [:p, "this thing"]
-      data.to_html.should == '<p>this thing</p>'
-    end
-
-    context "with properties" do
-      it "entags a tag array" do
-        data = [[:a, {:foo => :bar}]]
-        data.to_html.should == '<a foo="bar" />'
+    context "change" do
+      it "replaces the contents of the requested element" do
+        sliver = Sliver.new(@template)
+        sliver.change('.link', 'Go to Home')
+        sliver.render.should match(%r!<a class="link" href="/wtf">Go to Home</a>!)
       end
 
-      it "renders static text" do
-        data = [:p, {:class => 'test'},  "this thing"]
-        data.to_html.should == '<p class="test">this thing</p>'
-      end
-
-      it "entags properties around interleaved tag arrays" do
-        data = [[:a, [:b], {:foo => :bar}]]
-        data.to_html.should == '<a foo="bar"><b /></a>'
-      end
-
-      it "collects multiple hashes in to a single list of properties" do
-        data = [[:a, {:foo => :bar}, {:baz => 'quux!'}]]
-        data.to_html.should match(/baz="quux!"/)
-        data.to_html.should match(/foo="bar"/)
-      end
-
-      it "overrides properties which have already been defined to the left" do
-        data = [[:a, {:foo => :bar}, {:foo => 'quux!'}]]
-        data.to_html.should == '<a foo="quux!" />'
-      end
-
-      it "entags nested arrays" do
-        data = [[:a, [:b, {:lol => 'wut'}]]]
-        data.to_html.should == '<a><b lol="wut" /></a>'
-      end
-
-      it "entags nested multiple tag arrays" do
-        data = [[[:a, [:b, {:lol => 'wut'}]], [:c, [:d, {:no => 'wai'}]]]]
-        data.to_html.should == '<a><b lol="wut" /></a><c><d no="wai" /></c>'
+      it "automatically converts monkey arrays"do
+        sliver = Sliver.new(@template)
+        sliver.change('.link', [:p, 'pop'])
+        sliver.render.should match(%r!<a class="link" href="/wtf"><p>pop</p></a>!)
       end
     end
+
+    context "add"
+    context "remove"
+    context "loading partial template from external file"
+    context "loading partial template from inline div"
   end
 end

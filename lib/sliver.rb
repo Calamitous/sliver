@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'nokogiri'
-require_relative '../lib/omg_monkeys'
+#require_relative '../lib/omg_monkeys'
+require 'lib/omg_monkeys'
 
 class Sliver
   attr_reader :doc
@@ -13,12 +14,20 @@ class Sliver
     self.new(File.read(filename))
   end
 
-  def set_content(selector, data)
+  def add(selector, data)
     puts data.inspect
     selected = @doc.at_css(selector)
-    
+
     raise "No element found in template for selector \"#{selector}\"" unless selected
     selected.add_child (data.is_a?(Array) ? data.to_html : data.to_s)
+  end
+
+  def change(selector, data)
+    puts data.inspect
+    selected = @doc.at_css(selector)
+
+    raise "No element found in template for selector \"#{selector}\"" unless selected
+    selected.content = (data.is_a?(Array) ? data.to_html : data.to_s)
   end
 
   def render
@@ -33,10 +42,11 @@ class Sliver
     template = Sliver.load_template('test.html')
     things = ['Thing 1', 'Thing 2', 'NO WAI WAT']
 
-    template.set_content('.test', "Go to Home")
-    template.set_content('#list', things.map{|x| [:p, x]})
+    template.change('.test', "Go to Home")
+    template.change('#list', things.map{|x| [:p, x]})
     template.render_to_file
     template
   end
+
 end
 
