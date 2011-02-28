@@ -15,7 +15,6 @@ class Sliver
   end
 
   def add(selector, data)
-    puts data.inspect
     selected = @doc.at_css(selector)
 
     raise "No element found in template for selector \"#{selector}\"" unless selected
@@ -23,7 +22,6 @@ class Sliver
   end
 
   def change(selector, data)
-    puts data.inspect
     selected = @doc.at_css(selector)
 
     raise "No element found in template for selector \"#{selector}\"" unless selected
