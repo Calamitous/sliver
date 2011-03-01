@@ -18,14 +18,14 @@ class Sliver
     selected = @doc.at_css(selector)
 
     raise "No element found in template for selector \"#{selector}\"" unless selected
-    selected.add_child (data.is_a?(Array) ? data.to_html : data.to_s)
+    selected.add_child data.to_html
   end
 
   def change(selector, data)
     selected = @doc.at_css(selector)
 
     raise "No element found in template for selector \"#{selector}\"" unless selected
-    selected.content = (data.is_a?(Array) ? data.to_html : data.to_s)
+    selected.content = data.to_html
   end
 
   def render
@@ -45,6 +45,5 @@ class Sliver
     template.render_to_file
     template
   end
-
 end
 

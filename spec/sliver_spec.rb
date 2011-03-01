@@ -29,14 +29,17 @@ TEMPLATE
         sliver.render.should match(%r!<a class="link" href="/wtf">Go to Home</a>!)
       end
 
-      it "automatically converts monkey arrays"do
+      it "automatically converts monkey arrays" do
         sliver = Sliver.new(@template)
         sliver.change('.link', [:p, 'pop'])
         sliver.render.should match(%r!<a class="link" href="/wtf"><p>pop</p></a>!)
       end
     end
 
-    context "add"
+    context "add" do
+      it "appends to the contents of the requested element"
+      it "automatically converts monkey arrays"
+    end
     context "remove"
     context "loading partial template from external file"
     context "loading partial template from inline div"

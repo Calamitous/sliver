@@ -44,3 +44,8 @@ class Hash
   end
 end
 
+class String
+  def to_html
+    self
+  end
+end
