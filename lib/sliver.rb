@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'nokogiri'
-#require_relative '../lib/omg_monkeys'
-require 'lib/omg_monkeys'
+require File.expand_path('../../lib/omg_monkeys', __FILE__)
 
 class Sliver
   attr_reader :doc

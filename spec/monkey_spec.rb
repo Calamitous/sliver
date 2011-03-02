@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'rspec/autorun'
-#require_relative '../lib/sliver.rb'
-require 'lib/sliver.rb'
+require File.expand_path('../../lib/sliver', __FILE__)
 
 describe "monkey patches" do
   context "while entagging data" do
