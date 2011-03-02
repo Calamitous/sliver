@@ -6,3 +6,6 @@ Safety all evaled strings
 escape all html'ed text?
 de-monkeypatch Array and Hash, subclass and add a to_ method to A/H?
 
+Rendering assumes a single pass... should be idempotent?
+should affect all nodes found by selector
+rails pluginate
