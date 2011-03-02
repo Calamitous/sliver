@@ -13,18 +13,25 @@ class Sliver
     self.new(File.read(filename))
   end
 
-  def add(selector, data)
-    selected = @doc.at_css(selector)
-
-    raise "No element found in template for selector \"#{selector}\"" unless selected
-    selected.add_child data.to_html
+  def change(selector, data)
+    # render to noko objs and #swap?
+    get_selector(selector).inner_html= data.to_html
   end
 
-  def change(selector, data)
-    selected = @doc.at_css(selector)
+  def add_into(selector, data)
+    get_selector(selector).add_child data.to_html
+  end
 
-    raise "No element found in template for selector \"#{selector}\"" unless selected
-    selected.content = data.to_html
+  def insert_into(selector, data)
+    get_selector(selector).children.first.add_previous_sibling data.to_html
+  end
+
+  def delete(selector)
+    get_selector(selector).remove
+  end
+
+  def empty(selector)
+    get_selector(selector).children.each(&:remove)
   end
 
   def render
@@ -35,14 +42,13 @@ class Sliver
     File.open(filename, 'w') { |f| f.write(self.render) }
   end
 
-  def self.test
-    template = Sliver.load_template('test.html')
-    things = ['Thing 1', 'Thing 2', 'NO WAI WAT']
+  private
 
-    template.change('.test', "Go to Home")
-    template.change('#list', things.map{|x| [:p, x]})
-    template.render_to_file
-    template
+  def get_selector(selector)
+    selected = @doc.at_css(selector)
+    raise "No element found in template for selector \"#{selector}\"" unless selected
+    selected
   end
+
 end
 
