@@ -9,3 +9,7 @@ de-monkeypatch Array and Hash, subclass and add a to_ method to A/H?
 Rendering assumes a single pass... should be idempotent?
 should affect all nodes found by selector
 rails pluginate
+
+Allow blocks in tag arrays
+convert templates to tag arrays & update/render from there?
+check perf of hashtable lookup vs to_s conversion
