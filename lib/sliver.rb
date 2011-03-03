@@ -16,22 +16,27 @@ class Sliver
   def change(selector, data)
     # render to noko objs and #swap?
     get_selectors(selector).each { |s| s.inner_html= data.to_html }
+    self
   end
 
   def add_into(selector, data)
     get_selectors(selector).each { |s| s.add_child data.to_html }
+    self
   end
 
   def insert_into(selector, data)
     get_selectors(selector).each { |s| s.children.first.add_previous_sibling data.to_html }
+    self
   end
 
   def delete(selector)
     get_selectors(selector).each { |s| s.remove }
+    self
   end
 
   def empty(selector)
     get_selectors(selector).each { |s| s.children.each(&:remove) }
+    self
   end
 
   def render
