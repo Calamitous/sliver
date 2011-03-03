@@ -6,7 +6,7 @@ class Sliver
   attr_reader :doc
 
   def initialize(doc)
-    @doc = Nokogiri::HTML(doc)
+    @doc = Nokogiri::HTML(doc.to_html)
   end
 
   def self.load_template(filename)

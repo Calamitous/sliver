@@ -22,6 +22,17 @@ describe "Sliver" do
 TEMPLATE
       @sliver = Sliver.new(@template)
     end
+
+    context '#new' do
+      it "sets the doc value" do
+        Sliver.new('<br />').doc.should_not be_nil
+      end
+
+      it "automatically converts monkey arrays" do
+        Sliver.new([:c, [:p, 'A'], [:p, 'B']]).render.should match(%r+<c><p>A</p>\s*<p>B</p></c>+)
+      end
+    end
+
     context "#change" do
       it "replaces the contents of the requested element" do
         @sliver.change('.link', 'Go to Home')
