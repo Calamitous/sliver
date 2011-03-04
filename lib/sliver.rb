@@ -35,7 +35,7 @@ class Sliver
   end
 
   def empty(selector)
-    get_selectors(selector).each { |s| s.children.each(&:remove) }
+    get_selectors(selector).each { |s| s.children.each{ |x| x.remove } }
     self
   end
 
