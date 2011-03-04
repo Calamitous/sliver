@@ -24,6 +24,10 @@ class Sliver
     self
   end
 
+  def set_class(selector, class_val)
+    set_attributes(selector, {:class => class_val})
+  end
+
   def add_into(selector, data)
     get_selectors(selector).each { |s| s.add_child data.to_html }
     self

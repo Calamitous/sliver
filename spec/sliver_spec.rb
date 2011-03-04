@@ -162,6 +162,23 @@ TEMPLATE
       end
     end
 
+    context '#set_class' do
+      it "sets the attribute of the requested element" do
+        @sliver.set_class('.link', 'lunk')
+        @sliver.render.should match(%r+<a class="lunk" href="/wtf">Click Me!</a>+)
+      end
+
+      it "updates all nodes that match" do
+        sliver = Sliver.new('<p>A</p><p>B</p>')
+        sliver.set_class('p', 'aaa')
+        sliver.render.should match(%r+<p class="aaa">A</p>\s*<p class="aaa">B</p>+)
+      end
+
+      it "is chainable" do
+        @sliver.set_class('.link', 'b').render.should match(%r+class="b"+)
+      end
+    end
+
     context "loading partial template from external file"
     context "loading partial template from inline div"
   end
