@@ -135,23 +135,30 @@ TEMPLATE
       end
     end
 
-    context '#set_attribute' do
+    context '#set_attributes' do
       it "sets the attribute of the requested element" do
-        pending
-        @sliver.set_attribute('.link', {})
-        @sliver.render.should match(%r+<a class="link" href="/wtf">Please! Click Me!</a>+)
+        @sliver.set_attributes('.link', {:href => '/disco'})
+        @sliver.render.should match(%r+<a class="link" href="/disco">Click Me!</a>+)
+      end
+
+      it "adds an attribute to the requested element" do
+        @sliver.set_attributes('.link', {:toot => 'suite'})
+        @sliver.render.should match(%r+<a class="link" href="/wtf" toot="suite">Click Me!</a>+)
+      end
+
+      it "sets multiple attributes" do
+        @sliver.set_attributes('.link', { :href => '/disco', :toot => 'suite', :class => :baz, :foo => 'bar' })
+        @sliver.render.should match(%r+<a class="baz" href="/disco" toot="suite" foo="bar">Click Me!</a>+)
       end
 
       it "updates all nodes that match" do
-        pending
         sliver = Sliver.new('<p>A</p><p>B</p>')
-        sliver.set_attributes('p', 'C')
-        sliver.render.should match(%r+<p>CA</p>\s*<p>CB</p>+)
+        sliver.set_attributes('p', { :herp => 'derp' })
+        sliver.render.should match(%r+<p herp="derp">A</p>\s*<p herp="derp">B</p>+)
       end
 
       it "is chainable" do
-        pending
-        @sliver.set_attribute('.link', {:a => 'b'}).render.should match(%r++)
+        @sliver.set_attributes('.link', {:a => 'b'}).render.should match(%r+a="b"+)
       end
     end
 

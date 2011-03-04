@@ -19,6 +19,11 @@ class Sliver
     self
   end
 
+  def set_attributes(selector, attrs)
+    get_selectors(selector).each { |s| attrs.each{ |k, v| s[k.to_s] = v.to_s } }
+    self
+  end
+
   def add_into(selector, data)
     get_selectors(selector).each { |s| s.add_child data.to_html }
     self
