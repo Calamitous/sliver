@@ -135,6 +135,26 @@ TEMPLATE
       end
     end
 
+    context '#set_attribute' do
+      it "sets the attribute of the requested element" do
+        pending
+        @sliver.set_attribute('.link', {})
+        @sliver.render.should match(%r+<a class="link" href="/wtf">Please! Click Me!</a>+)
+      end
+
+      it "updates all nodes that match" do
+        pending
+        sliver = Sliver.new('<p>A</p><p>B</p>')
+        sliver.set_attributes('p', 'C')
+        sliver.render.should match(%r+<p>CA</p>\s*<p>CB</p>+)
+      end
+
+      it "is chainable" do
+        pending
+        @sliver.set_attribute('.link', {:a => 'b'}).render.should match(%r++)
+      end
+    end
+
     context "loading partial template from external file"
     context "loading partial template from inline div"
   end
