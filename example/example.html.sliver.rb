@@ -15,13 +15,17 @@ class ExampleView < Sliver::Template
     add_into('.link', name)
     change('#list', list_snippet('George'))
 
-    # set('.link', {:href => home_url})
-    # class('.selected', 'chosen')
+    set_attributes('.link', {:href => home_url})
+    set_class('.selected', 'chosen')
     delete('#admin_login') unless @data[:is_admin]
     super
   end
 
   private
+
+  def home_url
+    '/disco'
+  end
 
   def list_snippet(name)
     [
