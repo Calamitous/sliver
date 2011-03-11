@@ -61,6 +61,14 @@ class Hash
 end
 
 class Sliver::FragmentProperty < Hash
+  def initialize(data = {})
+    if data.respond_to?(:keys)
+      data.keys.each{|k| self[k] = data[k]}
+    else
+      raise ArgumentError, "Couldn't instantiate Sliver::FregmentProperty; I expected a Hash-y object."
+    end
+  end
+
   def to_property_string
     self.map{ |k, v| "#{k.to_s}=\"#{v.to_s}\""}.join(' ')
   end

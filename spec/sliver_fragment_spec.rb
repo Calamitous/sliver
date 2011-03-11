@@ -92,3 +92,43 @@ describe "Sliver::Fragment" do
     end
   end
 end
+
+describe Sliver::FragmentProperty do
+  context "instantiation" do
+    it "doesn't have any values" do
+      Sliver::FragmentProperty.new.keys.should be_empty
+    end
+
+    it "copies values from a provided hash" do
+      props = Sliver::FragmentProperty.new(:a => :b)
+      props[:a].should == :b
+    end
+
+    it "raises an error when an unhashable value is provided" do
+      lambda { Sliver::FragmentProperty.new("I'm a string!") }.should raise_error(ArgumentError)
+    end
+
+    it "occurs when Hash#to_fragment_property is called" do
+      hash = {:c => 45, "other" => Sliver}
+      prop = hash.to_fragment_property
+      prop.keys.each{ |k| hash[k].should == prop[k] }
+    end
+  end
+
+  context "rendering" do
+    it "returns an HTML property string" do
+      props = Sliver::FragmentProperty.new(:a => 45)
+      props.to_property_string.should == 'a="45"'
+    end
+
+    it "renders multiple properties" do
+      new_properties = {:a => 45, 'foo' => 'bar'}
+      props = Sliver::FragmentProperty.new(new_properties)
+      props.to_property_string.should == 'foo="bar" a="45"'
+    end
+
+    it "occurs when Hash#to_property_string is called" do
+      {:a => 45, 'foo' => 'bar'}.to_property_string.should == 'foo="bar" a="45"'
+    end
+  end
+end
