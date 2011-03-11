@@ -1,5 +1,7 @@
-class Array
-  # attr_reader :htmled
+class Sliver::Fragment < Array
+  def to_fragment
+    self
+  end
 
   def to_html
     if first.is_a?(Array) 
@@ -38,7 +40,27 @@ class Array
   end
 end
 
+class Array
+  def to_fragment
+    Sliver::Fragment.new(self)
+  end
+
+  def to_html
+    self.to_fragment.to_html
+  end
+end
+
 class Hash
+  def to_fragment_property
+    Sliver::FragmentProperty.new(self)
+  end
+
+  def to_property_string
+    self.to_fragment_property.to_property_string
+  end
+end
+
+class Sliver::FragmentProperty < Hash
   def to_property_string
     self.map{ |k, v| "#{k.to_s}=\"#{v.to_s}\""}.join(' ')
   end

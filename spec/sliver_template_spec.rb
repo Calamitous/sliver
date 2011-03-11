@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rspec/autorun'
 require File.expand_path('../../lib/sliver', __FILE__)
 
-describe "Sliver" do
+describe "Sliver::Template" do
   context "rendering" do
     before do
       @template = <<TEMPLATE
@@ -20,16 +20,16 @@ describe "Sliver" do
           </body>
         </html>
 TEMPLATE
-      @sliver = Sliver.new(@template)
+      @sliver = Sliver::Template.new(@template)
     end
 
     context '#new' do
       it "sets the doc value" do
-        Sliver.new('<br />').doc.should_not be_nil
+        Sliver::Template.new('<br />').doc.should_not be_nil
       end
 
       it "automatically converts monkey arrays" do
-        Sliver.new([:c, [:p, 'A'], [:p, 'B']]).render.should match(%r+<c><p>A</p>\s*<p>B</p></c>+)
+        Sliver::Template.new([:c, [:p, 'A'], [:p, 'B']]).render.should match(%r+<c><p>A</p>\s*<p>B</p></c>+)
       end
     end
 
@@ -49,7 +49,7 @@ TEMPLATE
       end
 
       it "updates all nodes that match" do
-        sliver = Sliver.new('<p>A</p><p>B</p>')
+        sliver = Sliver::Template.new('<p>A</p><p>B</p>')
         sliver.change('p', 'C')
         sliver.render.should match(%r+<p>C</p>\s*<p>C</p>+)
       end
@@ -71,7 +71,7 @@ TEMPLATE
       end
 
       it "updates all nodes that match" do
-        sliver = Sliver.new('<p>A</p><p>B</p>')
+        sliver = Sliver::Template.new('<p>A</p><p>B</p>')
         sliver.add_into('p', 'C')
         sliver.render.should match(%r+<p>AC</p>\s*<p>BC</p>+)
       end
@@ -93,7 +93,7 @@ TEMPLATE
       end
 
       it "updates all nodes that match" do
-        sliver = Sliver.new('<p>A</p><p>B</p>')
+        sliver = Sliver::Template.new('<p>A</p><p>B</p>')
         sliver.insert_into('p', 'C')
         sliver.render.should match(%r+<p>CA</p>\s*<p>CB</p>+)
       end
@@ -107,7 +107,7 @@ TEMPLATE
       end
 
       it "updates all nodes that match" do
-        sliver = Sliver.new('<b><p>A</p><p>B</p></b>')
+        sliver = Sliver::Template.new('<b><p>A</p><p>B</p></b>')
         sliver.delete('p')
         sliver.render.should match(%r+<b>\s*</b>+)
       end
@@ -125,7 +125,7 @@ TEMPLATE
       end
 
       it "updates all nodes that match" do
-        sliver = Sliver.new([:a, [:p, 'A'], [:p, 'B']])
+        sliver = Sliver::Template.new([:a, [:p, 'A'], [:p, 'B']])
         sliver.empty('p')
         sliver.render.should match(%r+<a><p></p>\s*<p></p></a>+)
       end
@@ -148,11 +148,11 @@ TEMPLATE
 
       it "sets multiple attributes" do
         @sliver.set_attributes('.link', { :href => '/disco', :toot => 'suite', :class => :baz, :foo => 'bar' })
-        @sliver.render.should match(%r+<a class="baz" href="/disco" toot="suite" foo="bar">Click Me!</a>+)
+        @sliver.render.should match(%r+<a class="baz" href="/disco" foo="bar" toot="suite">Click Me!</a>+)
       end
 
       it "updates all nodes that match" do
-        sliver = Sliver.new('<p>A</p><p>B</p>')
+        sliver = Sliver::Template.new('<p>A</p><p>B</p>')
         sliver.set_attributes('p', { :herp => 'derp' })
         sliver.render.should match(%r+<p herp="derp">A</p>\s*<p herp="derp">B</p>+)
       end
@@ -169,7 +169,7 @@ TEMPLATE
       end
 
       it "updates all nodes that match" do
-        sliver = Sliver.new('<p>A</p><p>B</p>')
+        sliver = Sliver::Template.new('<p>A</p><p>B</p>')
         sliver.set_class('p', 'aaa')
         sliver.render.should match(%r+<p class="aaa">A</p>\s*<p class="aaa">B</p>+)
       end

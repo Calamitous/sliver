@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rspec/autorun'
 require File.expand_path('../../lib/sliver', __FILE__)
 
-describe "monkey patches" do
+describe "Sliver::Fragment" do
   context "while entagging data" do
     it "entags a tag array" do
       data = [[:a]]

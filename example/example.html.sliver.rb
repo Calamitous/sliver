@@ -2,7 +2,7 @@ require File.expand_path('../../lib/sliver/template', __FILE__)
 
 # load './example.html.sliver.rb'; ExampleView.new.render_to_file('test2.html')
 
-class ExampleView < Sliver::Template
+class ExampleView < Sliver::Transformer
 
   def initialize(data = {})
     @data = data
