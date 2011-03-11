@@ -148,7 +148,11 @@ TEMPLATE
 
       it "sets multiple attributes" do
         @sliver.set_attributes('.link', { :href => '/disco', :toot => 'suite', :class => :baz, :foo => 'bar' })
-        @sliver.render.should match(%r+<a class="baz" href="/disco" foo="bar" toot="suite">Click Me!</a>+)
+        rendered = @sliver.render
+        rendered.should match(%r+<a .*class="baz".*>Click Me!</a>+)
+        rendered.should match(%r+<a .*href="/disco".*>Click Me!</a>+)
+        rendered.should match(%r+<a .*foo="bar".*>Click Me!</a>+)
+        rendered.should match(%r+<a .*toot="suite".*>Click Me!</a>+)
       end
 
       it "updates all nodes that match" do
