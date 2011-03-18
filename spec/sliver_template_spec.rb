@@ -39,6 +39,9 @@ TEMPLATE
         @sliver.render.should match(%r+<a class="link" href="/wtf">Go to Home</a>+)
       end
 
+      it 'errors out when the selector is not found'
+      it 'allows caller to override "not found" behavior'
+
       it 'automatically converts monkey arrays' do
         @sliver.change('.link', [:p, 'pop'])
         @sliver.render.should match(%r+<a class="link" href="/wtf"><p>pop</p></a>+)
@@ -61,6 +64,9 @@ TEMPLATE
         @sliver.render.should match(%r+<a class="link" href="/wtf">Click Me! Please!</a>+)
       end
 
+      it 'errors out when the selector is not found'
+      it 'allows caller to override "not found" behavior'
+
       it 'automatically converts monkey arrays' do
         @sliver.add_into('#list', [:p, 'less text'])
         @sliver.render.should match(%r+<p>MORE text</p>\s*<p>less text</p>+)
@@ -82,6 +88,9 @@ TEMPLATE
         @sliver.insert_into('.link', 'Please! ')
         @sliver.render.should match(%r+<a class="link" href="/wtf">Please! Click Me!</a>+)
       end
+
+      it 'errors out when the selector is not found'
+      it 'allows caller to override "not found" behavior'
 
       it 'automatically converts monkey arrays' do
         @sliver.insert_into('#list', [:p, 'less text'])
@@ -106,6 +115,9 @@ TEMPLATE
         @sliver.render.should_not match(/Click/)
       end
 
+      it 'errors out when the selector is not found'
+      it 'allows caller to override "not found" behavior'
+
       it 'updates all nodes that match' do
         sliver = Sliver::Template.new('<b><p>A</p><p>B</p></b>')
         sliver.delete('p')
@@ -123,6 +135,9 @@ TEMPLATE
         @sliver.empty('.link')
         @sliver.render.should match(%r+<a class="link" href="/wtf">\s*</a>+)
       end
+
+      it 'errors out when the selector is not found'
+      it 'allows caller to override "not found" behavior'
 
       it 'updates all nodes that match' do
         sliver = Sliver::Template.new([:a, [:p, 'A'], [:p, 'B']])
@@ -145,6 +160,9 @@ TEMPLATE
         @sliver.set_attributes('.link', {:toot => 'suite'})
         @sliver.render.should match(%r+<a class="link" href="/wtf" toot="suite">Click Me!</a>+)
       end
+
+      it 'errors out when the selector is not found'
+      it 'allows caller to override "not found" behavior'
 
       it 'sets multiple attributes' do
         @sliver.set_attributes('.link', { :href => '/disco', :toot => 'suite', :class => :baz, :foo => 'bar' })
@@ -172,6 +190,9 @@ TEMPLATE
         @sliver.render.should match(%r+<a class="lunk" href="/wtf">Click Me!</a>+)
       end
 
+      it 'errors out when the selector is not found'
+      it 'allows caller to override "not found" behavior'
+
       it 'updates all nodes that match' do
         sliver = Sliver::Template.new('<p>A</p><p>B</p>')
         sliver.set_class('p', 'aaa')
@@ -183,7 +204,18 @@ TEMPLATE
       end
     end
 
+    context '#list' do
+      it 'creates a sub from the first element of the selector'
+      it 'is chainable'
+      it 'updates all nodes that match'
+      it 'errors out when the selector is not found'
+      it 'allows caller to override "not found" behavior'
+      it 'requires a block'
+      it 'does not leave the original content in the selector'
+      it 'runs the block for each data item provided'
+      it 'uses a fresh copy of the sub for each data element'
+    end
+
     context 'loading partial template from external file'
-    context 'loading partial template from inline div'
   end
 end

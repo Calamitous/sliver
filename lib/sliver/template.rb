@@ -1,8 +1,9 @@
 class Sliver::Template
-  attr_reader :doc
+  attr_reader :doc, :subs
 
-  def initialize(doc)
-    @doc = Nokogiri::HTML(doc.to_html)
+  def initialize(doc, full_document = true)
+    @subs = {}
+    @doc = full_document ? Nokogiri::HTML(doc.to_html) : Nokogiri::HTML.fragment(doc.to_html)
   end
 
   def self.load_template(filename)
@@ -44,6 +45,12 @@ class Sliver::Template
     self
   end
 
+  def list(selector, data_list)
+    sub = make_repeating_sub(selector).clone
+    empty(selector)
+    data_list.each{ |d| add_into(selector, yield(d, @subs[selector].dup).render) }
+  end
+
   def render
     @doc.to_html
   end
@@ -58,6 +65,11 @@ class Sliver::Template
     selecteds = @doc.css(selector)
     raise "No element found in template for selector \"#{selector}\"" if selecteds.empty?
     selecteds
+  end
+
+  def make_repeating_sub(selector)
+    node = get_selectors(selector).first.element_children.first
+    @subs[selector] = Sliver::Template.new(node, false)
   end
 
 end
