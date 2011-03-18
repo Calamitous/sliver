@@ -15,9 +15,15 @@ class ExampleView < Sliver::Transformer
   # use_template 'test.html'
   def render
     change('h1', 'Zorbo\'s Awesome Website')
-    add_into('.link', name)
-    change('#list', list_snippet('George'))
     add_into('.link', 'name')
+    #change('#list', list_snippet('George'))
+    list('#list', data_rows) do |row, sub|
+      sub.change('.key', row.first)
+      sub.change('.value', row.last)
+      # oooooh, fix this
+      sub.set_class('p', 'selected') if row.first == 'e'
+      sub
+    end
 
     set_attributes('.link', {:href => home_url})
     #set_class('.selected', 'chosen')
@@ -36,6 +42,15 @@ class ExampleView < Sliver::Transformer
       [:p, "#{name}'s Phone"],
       [:p, "#{name}'s Address", {:class => 'selected'}],
       [:p, "#{name}'s OS Preference"],
+    ]
+  end
+
+  def data_rows
+    [
+      ['a', 'b'],
+      ['c', 'd'],
+      ['e', 'f'],
+      ['g', 'h']
     ]
   end
 end
