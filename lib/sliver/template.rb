@@ -10,38 +10,38 @@ class Sliver::Template
     self.new(File.read(filename))
   end
 
-  def change(selector, data)
+  def change(selector, data, options = {})
     # render to noko objs and #swap?
-    get_selectors(selector).each { |s| s.inner_html= data.to_html }
+    get_selectors(selector, !options[:silent_failure]).each { |s| s.inner_html= data.to_html }
     self
   end
 
-  def set_attributes(selector, attrs)
-    get_selectors(selector).each { |s| attrs.each{ |k, v| s[k.to_s] = v.to_s } }
+  def set_attributes(selector, attrs, options = {})
+    get_selectors(selector, !options[:silent_failure]).each { |s| attrs.each{ |k, v| s[k.to_s] = v.to_s } }
     self
   end
 
-  def set_class(selector, class_val)
-    set_attributes(selector, {:class => class_val})
+  def set_class(selector, class_val, options = {})
+    set_attributes(selector, {:class => class_val}, options)
   end
 
-  def add_into(selector, data)
-    get_selectors(selector).each { |s| s.add_child data.to_html }
+  def add_into(selector, data, options = {})
+    get_selectors(selector, !options[:silent_failure]).each { |s| s.add_child data.to_html }
     self
   end
 
-  def insert_into(selector, data)
-    get_selectors(selector).each { |s| s.children.first.add_previous_sibling data.to_html }
+  def insert_into(selector, data, options = {})
+    get_selectors(selector, !options[:silent_failure]).each { |s| s.children.first.add_previous_sibling data.to_html }
     self
   end
 
-  def delete(selector)
-    get_selectors(selector).each { |s| s.remove }
+  def delete(selector, options = {})
+    get_selectors(selector, !options[:silent_failure]).each { |s| s.remove }
     self
   end
 
-  def empty(selector)
-    get_selectors(selector).each { |s| s.children.each{ |x| x.remove } }
+  def empty(selector, options = {})
+    get_selectors(selector, !options[:silent_failure]).each { |s| s.children.each{ |x| x.remove } }
     self
   end
 

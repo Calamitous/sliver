@@ -39,8 +39,13 @@ TEMPLATE
         @sliver.render.should match(%r+<a class="link" href="/wtf">Go to Home</a>+)
       end
 
-      it 'errors out when the selector is not found'
-      it 'allows caller to override "not found" behavior'
+      it 'errors out when the selector is not found' do
+        lambda { @sliver.change('INVALIDNODE', 'Go to Home') }.should raise_error
+      end
+
+      it 'allows caller to override "not found" behavior' do
+        lambda { @sliver.change('INVALIDNODE', 'Go to Home', :silent_failure => true) }.should_not raise_error
+      end
 
       it 'automatically converts monkey arrays' do
         @sliver.change('.link', [:p, 'pop'])
@@ -64,8 +69,13 @@ TEMPLATE
         @sliver.render.should match(%r+<a class="link" href="/wtf">Click Me! Please!</a>+)
       end
 
-      it 'errors out when the selector is not found'
-      it 'allows caller to override "not found" behavior'
+      it 'errors out when the selector is not found' do
+        lambda { @sliver.add_into('INVALIDNODE', ' Please!') }.should raise_error
+      end
+
+      it 'allows caller to override "not found" behavior' do
+        lambda { @sliver.add_into('INVALIDNODE', ' Please!', :silent_failure => true) }.should_not raise_error
+      end
 
       it 'automatically converts monkey arrays' do
         @sliver.add_into('#list', [:p, 'less text'])
@@ -89,8 +99,14 @@ TEMPLATE
         @sliver.render.should match(%r+<a class="link" href="/wtf">Please! Click Me!</a>+)
       end
 
-      it 'errors out when the selector is not found'
-      it 'allows caller to override "not found" behavior'
+      it 'errors out when the selector is not found' do
+        lambda { @sliver.insert_into('INVALIDNODE', 'Please! ') }.should raise_error
+      end
+
+      it 'allows caller to override "not found" behavior' do
+        lambda { @sliver.insert_into('INVALIDNODE', 'Please! ', :silent_failure => true) }.should_not raise_error
+      end
+
 
       it 'automatically converts monkey arrays' do
         @sliver.insert_into('#list', [:p, 'less text'])
@@ -115,8 +131,13 @@ TEMPLATE
         @sliver.render.should_not match(/Click/)
       end
 
-      it 'errors out when the selector is not found'
-      it 'allows caller to override "not found" behavior'
+      it 'errors out when the selector is not found' do
+        lambda { @sliver.delete('INVALIDNODE') }.should raise_error
+      end
+
+      it 'allows caller to override "not found" behavior' do
+        lambda { @sliver.delete('INVALIDNODE', :silent_failure => true) }.should_not raise_error
+      end
 
       it 'updates all nodes that match' do
         sliver = Sliver::Template.new('<b><p>A</p><p>B</p></b>')
@@ -136,8 +157,14 @@ TEMPLATE
         @sliver.render.should match(%r+<a class="link" href="/wtf">\s*</a>+)
       end
 
-      it 'errors out when the selector is not found'
-      it 'allows caller to override "not found" behavior'
+      it 'errors out when the selector is not found' do
+        lambda { @sliver.empty('INVALID_NODE') }.should raise_error
+      end
+
+      it 'allows caller to override "not found" behavior' do
+        lambda { @sliver.empty('INVALID_NODE', :silent_failure => true) }.should_not raise_error
+      end
+
 
       it 'updates all nodes that match' do
         sliver = Sliver::Template.new([:a, [:p, 'A'], [:p, 'B']])
@@ -161,8 +188,13 @@ TEMPLATE
         @sliver.render.should match(%r+<a class="link" href="/wtf" toot="suite">Click Me!</a>+)
       end
 
-      it 'errors out when the selector is not found'
-      it 'allows caller to override "not found" behavior'
+      it 'errors out when the selector is not found' do
+        lambda { @sliver.set_attributes('INVALID_NODE', {:toot => 'suite'}) }.should raise_error
+      end
+
+      it 'allows caller to override "not found" behavior' do
+        lambda { @sliver.set_attributes('INVALID_NODE', {:toot => 'suite'}, :silent_failure => true) }.should_not raise_error
+      end
 
       it 'sets multiple attributes' do
         @sliver.set_attributes('.link', { :href => '/disco', :toot => 'suite', :class => :baz, :foo => 'bar' })
@@ -190,8 +222,13 @@ TEMPLATE
         @sliver.render.should match(%r+<a class="lunk" href="/wtf">Click Me!</a>+)
       end
 
-      it 'errors out when the selector is not found'
-      it 'allows caller to override "not found" behavior'
+      it 'errors out when the selector is not found' do
+        lambda{ @sliver.set_class('INVALID_NODE', 'lunk') }.should raise_error
+      end
+
+      it 'allows caller to override "not found" behavior' do
+        lambda{ @sliver.set_class('INVALID_NODE', 'lunk', :silent_failure => true) }.should_not raise_error
+      end
 
       it 'updates all nodes that match' do
         sliver = Sliver::Template.new('<p>A</p><p>B</p>')
