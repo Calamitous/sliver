@@ -45,10 +45,13 @@ class Sliver::Template
     self
   end
 
-  def list(selector, data_list)
-    sub = make_repeating_sub(selector).clone
+  def list(selector, data_list, options = {})
+    raise(ArgumentError, "Block expected") unless block_given?
+    sub = make_repeating_sub(selector, options)
+    return self unless sub
     empty(selector)
     data_list.each{ |d| add_into(selector, yield(d, @subs[selector].dup).render) }
+    self
   end
 
   def render
@@ -67,9 +70,12 @@ class Sliver::Template
     selecteds
   end
 
-  def make_repeating_sub(selector)
-    node = get_selectors(selector).first.element_children.first
-    @subs[selector] = Sliver::Template.new(node, false)
+  def make_repeating_sub(selector, options = {})
+    node = get_selectors(selector, !options[:silent_failure]).first
+    return unless node
+    sub = node.element_children.first
+    return unless sub
+    @subs[selector] = Sliver::Template.new(sub, false)
   end
 
 end

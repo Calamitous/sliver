@@ -242,14 +242,36 @@ TEMPLATE
     end
 
     context '#list' do
-      it 'creates a sub from the first element of the selector'
-      it 'is chainable'
-      it 'updates all nodes that match'
-      it 'errors out when the selector is not found'
-      it 'allows caller to override "not found" behavior'
-      it 'requires a block'
-      it 'does not leave the original content in the selector'
+      it 'creates a sub from the first element of the selector' do
+        @sliver.subs.should be_empty
+        @sliver.list('#list', []){}.subs.should_not be_empty
+        @sliver.subs['#list'].should be_a(Sliver::Template)
+      end
+
+      it 'is chainable' do
+        @sliver.list('#list', []){}.should == @sliver
+      end
+
+      it 'errors out when the selector is not found' do
+        lambda { @sliver.list('INVALIDNODE', []){} }.should raise_error
+      end
+
+      it 'allows caller to override "not found" behavior' do
+        lambda { @sliver.list('INVALIDNODE', [], :silent_failure => true){} }.should_not raise_error
+      end
+
+      it 'requires a block' do
+        lambda { @sliver.list('#list', []) }.should raise_error
+      end
+
+      it 'does not leave the original content in the selector' do
+        @sliver.list('#list', []){}
+        @sliver.render.should match(%r+id="list"+)
+        @sliver.render.should_not match(%r+text+)
+      end
+
       it 'runs the block for each data item provided'
+      it 'updates all nodes that match'
       it 'uses a fresh copy of the sub for each data element'
     end
 
