@@ -61,9 +61,9 @@ class Sliver::Template
 
   private
 
-  def get_selectors(selector)
+  def get_selectors(selector, raise_errors = true)
     selecteds = @doc.css(selector)
-    raise "No element found in template for selector \"#{selector}\"" if selecteds.empty?
+    raise "No element found in template for selector \"#{selector}\"" if selecteds.empty? && raise_errors
     selecteds
   end
 
