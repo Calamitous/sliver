@@ -83,7 +83,7 @@ class Sliver::Template
     return unless node
     sub = node.element_children.first
     return unless sub
-    sub_templates[selector] = self.class.new(sub, false)
+    sub_templates[selector] = Sliver::Template.new(sub.to_html, false)
     sub.to_html
   end
 
