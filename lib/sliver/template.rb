@@ -1,9 +1,9 @@
 class Sliver::Template
-  attr_reader :doc, :subs
+  attr_reader :doc, :sub_templates
 
   def initialize(doc, full_document = true)
-    @subs = {}
-    @doc = full_document ? Nokogiri::HTML(doc.to_html) : Nokogiri::HTML.fragment(doc.to_html)
+    @sub_templates = {}
+    reload(doc, full_document)
   end
 
   def self.load_template(filename)
@@ -42,6 +42,11 @@ class Sliver::Template
 
   def empty(selector, options = {})
     get_selectors(selector, !options[:silent_failure]).each { |s| s.children.each{ |x| x.remove } }
+    self
+  end
+
+  def reload(from, full_document = true)
+    @doc = full_document ? Nokogiri::HTML(from.to_html) : Nokogiri::HTML.fragment(from.to_html)
     self
   end
 

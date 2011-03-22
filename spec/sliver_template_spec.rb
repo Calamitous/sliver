@@ -243,9 +243,9 @@ TEMPLATE
 
     context '#list' do
       it 'creates a sub from the first element of the selector' do
-        @sliver.subs.should be_empty
-        @sliver.list('#list', []){}.subs.should_not be_empty
-        @sliver.subs['#list'].should be_a(Sliver::Template)
+        @sliver.sub_templates.should be_empty
+        @sliver.list('#list', []){}.sub_templates.should_not be_empty
+        @sliver.sub_templates['#list'].should be_a(Sliver::Template)
       end
 
       it 'is chainable' do
