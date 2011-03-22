@@ -2,7 +2,7 @@ require File.expand_path('../../lib/sliver/template', __FILE__)
 
 # load './example.html.sliver.rb'; ExampleView.new.render_to_file('test2.html')
 
-# load '../lib/sliver.rb'; load './example.html.sliver.rb'; ev = ExampleView.new; a = ev.make_repeating_sub('#list')
+# load '../lib/sliver.rb'; load './example.html.sliver.rb'; ev = ExampleView.new; ev.render_to_file('test4.html')
 #
 class ExampleView < Sliver::Transformer
 
@@ -20,8 +20,7 @@ class ExampleView < Sliver::Transformer
     list('#list', data_rows) do |row, sub|
       sub.change('.key', row.first)
       sub.change('.value', row.last)
-      # oooooh, fix this
-      sub.set_class('p', 'selected') if row.first == 'e'
+      sub.set_class('p', 'selected') if row.first == 'c'
       sub
     end
 
