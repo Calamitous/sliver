@@ -270,9 +270,23 @@ TEMPLATE
         @sliver.render.should_not match(%r+text+)
       end
 
+      it 'updates all nodes that match' do
+        sliver = Sliver::Template.new('<p><span>A</span></p><a href="/shrug">link</a><p><br /></p>')
+        sliver.list('p', ['c', 'd']) { |row, sub| sub.add_into('span', row) }
+        sliver.render.should match(%r+<p><span>Ac</span><span>Ad</span></p>\s*<a href="/shrug">link</a><p><span>Ac</span><span>Ad</span></p>+)
+      end
+
+      it 'uses a fresh copy of the sub for each data element' do
+        sliver = Sliver::Template.new('<p><span>A</span></p>')
+        sliver.list('p', %w{c d e}) do |row, sub|
+          sub.add_into('span', row)
+          sub
+        end
+        sliver.render.should match(%r+<p><span>Ac</span><span>Ad</span><span>Ae</span></p>+)
+      end
+
       it 'runs the block for each data item provided'
-      it 'updates all nodes that match'
-      it 'uses a fresh copy of the sub for each data element'
+      it 'accepts a fragment as a partial'
     end
 
     context 'loading partial template from external file'

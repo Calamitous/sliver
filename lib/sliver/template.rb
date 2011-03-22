@@ -52,10 +52,13 @@ class Sliver::Template
 
   def list(selector, data_list, options = {})
     raise(ArgumentError, "Block expected") unless block_given?
-    sub = make_repeating_sub(selector, options)
-    return self unless sub
+    sub_template_string = make_repeating_sub(selector, options)
+    return self unless sub_template_string
     empty(selector)
-    data_list.each{ |d| add_into(selector, yield(d, @subs[selector].dup).render) }
+    data_list.each do |d|
+      sub = sub_templates[selector].reload(sub_template_string, false)
+      add_into(selector, yield(d, sub).render)
+    end
     self
   end
 
@@ -80,7 +83,8 @@ class Sliver::Template
     return unless node
     sub = node.element_children.first
     return unless sub
-    @subs[selector] = Sliver::Template.new(sub, false)
+    sub_templates[selector] = self.class.new(sub, false)
+    sub.to_html
   end
 
 end
